@@ -42,6 +42,7 @@ public class UserAdminService {
         return userDao.createUser(userEntity);
     }
 
+    //get user details
     public UserEntity getUser(String userUuid, String authorizationToken, boolean admin) throws UserNotFoundException, AuthorizationFailedException {
         UserAuthEntity userAuthTokenEntity = userDao.getUserAuthToken(authorizationToken);
 

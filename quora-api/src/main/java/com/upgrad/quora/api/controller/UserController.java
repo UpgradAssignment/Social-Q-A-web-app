@@ -41,7 +41,7 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
 
-
+// User registration Endpoint
     @RequestMapping(method = RequestMethod.POST, path = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signUp(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
         UserEntity userEntity = new UserEntity();
@@ -63,6 +63,7 @@ public class UserController {
     }
 
 
+    // User Log in Endpoint
     @RequestMapping(method = RequestMethod.POST,path = "/user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> signIn(@RequestHeader("authorization") final String authorization) throws
             AuthenticationFailedException{

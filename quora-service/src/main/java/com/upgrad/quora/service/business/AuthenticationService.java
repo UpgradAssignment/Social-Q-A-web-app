@@ -24,15 +24,6 @@ public class AuthenticationService {
     @Autowired
     private PasswordCryptographyProvider passwordCryptographyProvider;
 
-    /**
-     * Method is used for providing authentication to a user
-     * The method takes username and password as argument.
-     *
-     * @param username String username
-     * @param password String password
-     * @return UserAuthEntity object
-     * @throws AuthenticationFailedException exception indicating Authentication failed
-     */
     @Transactional(propagation = Propagation.REQUIRED)
     public UserAuthEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
         UserEntity userEntity = userDao.getUserByUserName(username);
@@ -40,8 +31,6 @@ public class AuthenticationService {
             throw new AuthenticationFailedException("ATH-001", "This username does not exist");
         }
 
-        //delete existing auth details for the user in database.
-        //userDao.deleteExistingAuthDetailsForUser(userEntity.getUuid());
 
         String encryptedPwd = passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
         if (encryptedPwd.equals(userEntity.getPassword())) {
@@ -62,14 +51,7 @@ public class AuthenticationService {
         }
     }
 
-    /**
-     * method used for authenticating access token of user
-     * if access token is not there that means user is not signed in.
-     *
-     * @param accessToken accessToken String to be authenticated
-     * @return UserEntity Object
-     * @throws SignOutRestrictedException thrown if user does not exist
-     */
+//generate access token
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity authenticateAccessToken(final String accessToken) throws SignOutRestrictedException {
 

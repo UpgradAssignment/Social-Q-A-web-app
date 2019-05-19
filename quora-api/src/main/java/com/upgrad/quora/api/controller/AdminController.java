@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class AdminController {
 
-    //constant messages
+
     private static final String USER_SUCCESSFULLY_DELETED = "USER SUCCESSFULLY DELETED";
 
     private final
@@ -31,9 +31,8 @@ public class AdminController {
     public ResponseEntity<UserDeleteResponse> userDelete(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         //Check user to be deleted
         final UserEntity userEntity = userAdminService.getUser(userUuid, authorization, true);
-        //send the user for deletion
         userAdminService.deleteUser(userUuid);
-        //send REST response to client
+
         UserDeleteResponse userDeleteResponse = new UserDeleteResponse().id(userEntity.getUuid()).status(USER_SUCCESSFULLY_DELETED);
         return new ResponseEntity<>(userDeleteResponse, HttpStatus.OK);
     }
