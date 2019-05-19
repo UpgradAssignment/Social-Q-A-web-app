@@ -49,7 +49,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
     }
 
-
+    //Mapping for fetching all questions
     @RequestMapping(method = RequestMethod.GET, path = "/question/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDetailsResponse> getAllQuestions(@RequestHeader final String authorization) throws AuthorizationFailedException, QuestionNotFoundException {
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.ALL_QUESTION);
@@ -66,7 +66,7 @@ public class QuestionController {
     }
 
 
-
+    //Mapping for edit feature
     @RequestMapping(method = RequestMethod.PUT, path = "/question/edit/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionEditResponse> editQuestionContent(QuestionEditRequest questionEditRequest, @PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.EDIT_QUESTION);
@@ -79,6 +79,7 @@ public class QuestionController {
     }
 
 
+    //Mapping for delete question
     @RequestMapping(method = RequestMethod.DELETE, path = "/question/delete/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> userDelete(@PathVariable("questionId") final String questionUuId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.DELETE_QUESTION);
@@ -91,7 +92,7 @@ public class QuestionController {
         return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse, HttpStatus.OK);
     }
 
-
+    //Mapping for fetching questions using UUID
     @RequestMapping(method = RequestMethod.GET, path = "/question/all/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDetailsResponse> getAllQuestionsByUser(@PathVariable("userId") final String uuId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, QuestionNotFoundException, UserNotFoundException {
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.ALL_QUESTION_FOR_USER);

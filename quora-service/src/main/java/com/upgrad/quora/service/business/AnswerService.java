@@ -29,24 +29,13 @@ public class AnswerService {
     @Autowired
     QuestionDao questionDao;
 
-    /**
-     * method use for creating an answer.
-     *
-     * @param answer object to be created
-     * @return created answer object
-     */
+   //Create answer on Post
     @Transactional(propagation = Propagation.REQUIRED)
     public Answer createAnswer(Answer answer) {
         return answerDao.createAnswer(answer);
     }
 
-    /**
-     * method used for gettting AnswerFor a UUid.
-     *
-     * @param answerUuId answerUUid String
-     * @return Answer object
-     * @throws AnswerNotFoundException exception thrown if answer not found
-     */
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Answer getAnswerForUuId(String answerUuId) throws AnswerNotFoundException {
         Answer answer = answerDao.getAnswerForUuId(answerUuId);
@@ -57,18 +46,7 @@ public class AnswerService {
         }
     }
 
-    /**
-     * method used for checking if user is an owner of the answer.
-     * This method is used in both edit and deleting an answer and throws
-     * specific messaged in case an exception in delete or edit mode.
-     *
-     * @param answerUuId     answeruuid String
-     * @param authorizedUser access token of the user
-     * @param actionType     enum used to identify whether it is a edit or delete action
-     * @return Answer object
-     * @throws AnswerNotFoundException      exception thrown if answer not found
-     * @throws AuthorizationFailedException exception thrown if user is not authorized for editing.deleting the answer
-     */
+    //Validate Privilege
     @Transactional(propagation = Propagation.REQUIRED)
     public Answer isUserAnswerOwner(String answerUuId, UserAuthEntity authorizedUser, ActionType actionType) throws AnswerNotFoundException, AuthorizationFailedException {
         Answer answer = answerDao.getAnswerForUuId(answerUuId);
@@ -94,35 +72,19 @@ public class AnswerService {
         }
     }
 
-    /**
-     * method used for editing answer
-     *
-     * @param answer Answer object
-     * @return edited Answer object
-     */
+
     @Transactional(propagation = Propagation.REQUIRED)
     public Answer editAnswer(Answer answer) {
         return answerDao.editAnswer(answer);
     }
 
-    /**
-     * method used for deleting answer
-     *
-     * @param answer Answer object
-     */
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteAnswer(Answer answer) {
         answerDao.deleteAnswer(answer);
     }
 
-    /**
-     * method used for getting answer for a specific question.
-     *
-     * @param questionUuId question uuid String object
-     * @return List of Answer for the specicif question
-     * @throws AnswerNotFoundException  exception thrown if answer not found
-     * @throws InvalidQuestionException exception thrown if question is not found
-     */
+
     @Transactional(propagation = Propagation.REQUIRED)
     public List<Answer> getAnswersForQuestion(String questionUuId) throws AnswerNotFoundException, InvalidQuestionException {
         //check if the question exists in question database

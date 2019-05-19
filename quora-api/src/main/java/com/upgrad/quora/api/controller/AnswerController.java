@@ -38,15 +38,14 @@ public class AnswerController {
 
     @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerEditResponse> editAnswerContent(AnswerEditRequest answerEditRequest, @PathVariable("answerId") final String answerUuId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
-        //Authorize the user if he has signed in properly
+        //Authorize
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.EDIT_ANSWER);
 
-        //get the answer Object after checking if user if owner of the answer
+        //Edit response
         Answer answer = answerService.isUserAnswerOwner(answerUuId, authorizedUser, ActionType.EDIT_ANSWER);
-        //set the details that needs to updated in database
         answer.setAnswer(answerEditRequest.getContent());
         answer.setDate(ZonedDateTime.now());
-        Answer editedAnswer = answerService.editAnswer(answer);
+        Answer editedAnswer = answerService.editAnswer(answer);// persist changes
         AnswerEditResponse answerEditResponse = new AnswerEditResponse()
                 .id(answerUuId)
                 .status("ANSWER EDITED");
@@ -55,9 +54,9 @@ public class AnswerController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/answer/delete/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("answerId") final String answerUuId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
-        //Authorize the user if he has signed in properly
+
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.DELETE_ANSWER);
-        //Check if the user is himself or an admin trying to delete the answer
+        //Delete validation
         Answer answer = answerService.isUserAnswerOwner(answerUuId, authorizedUser, ActionType.DELETE_ANSWER);
         answerService.deleteAnswer(answer);
         AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse()
@@ -69,7 +68,7 @@ public class AnswerController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable("questionId") final String questionId, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, InvalidQuestionException, AnswerNotFoundException {
-        //Authorize the user if he has signed in properly
+
         UserAuthEntity authorizedUser = userAdminService.getUserByAccessToken(authorization, ActionType.GET_ALL_ANSWER_TO_QUESTION);
         List<Answer> answerList = answerService.getAnswersForQuestion(questionId);
         StringBuilder contentBuilder = new StringBuilder();
@@ -98,7 +97,7 @@ public class AnswerController {
         ZonedDateTime now = ZonedDateTime.now();
         answer.setDate(now);
         Answer createdAnswer = answerService.createAnswer(answer);
-        //create answer reponse object
+
         AnswerResponse answerResponse = new AnswerResponse().id(createdAnswer.getUuid()).status("ANSWER CREATED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.CREATED);
     }
